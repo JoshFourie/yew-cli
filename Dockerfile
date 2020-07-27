@@ -1,0 +1,1 @@
+FROM ventifact/rust-wasm
