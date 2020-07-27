@@ -5,10 +5,12 @@ mod app;
 
 use clap::{App, ArgMatches};
 
+use std::io;
+
 trait YewSubcommand<'a> {
     fn new(args: &'a ArgMatches) -> Self;
 
-    fn run(self);
+    fn run(self) -> io::Result<()>;
 }
 
 fn main() {
@@ -18,7 +20,7 @@ fn main() {
     match matches.subcommand() {
         ("new", cmd) => {
             match cmd {
-                Some(args) => NewProject::new(args).run(),
+                Some(args) => NewProject::new(args).run().unwrap(),
                 None => todo!()
             }
         },
