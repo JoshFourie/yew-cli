@@ -1,0 +1,6 @@
+[submodule "fd"]
+	path = fd
+	url = git@github.com:JoshFourie/fd.git
+[submodule "sd"]
+	path = sd
+	url = git@github.com:JoshFourie/sd.git
