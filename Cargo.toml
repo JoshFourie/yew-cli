@@ -13,4 +13,4 @@ members = [
 ]
 
 [dependencies]
-clap = {version = "3.0.0-beta.1", features = ["yaml"]}
+clap = {version = "2.33", features = ["yaml"]}
