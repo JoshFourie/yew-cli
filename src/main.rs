@@ -1,3 +1,5 @@
+mod subcommands;
+
 use clap::{App, ArgMatches, load_yaml};
 
 fn main() {
