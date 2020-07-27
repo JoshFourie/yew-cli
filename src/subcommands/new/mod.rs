@@ -1,8 +1,9 @@
 use clap::ArgMatches;
 
-use std::{process, fs, io};
-use process::{Command, Output};
+use std::{process, fs, path, io};
+use process::Command;
 use fs::{File, OpenOptions};
+use path::PathBuf;
 
 use crate::YewSubcommand;
 
@@ -54,10 +55,10 @@ impl<'a> NewProject<'a> {
 
     fn copy_rust(&self) -> io::Result<&Self> {
         let cargo_dest: String = format!("{}/Cargo.toml", self.outdir);
-        write(CARGO, cargo_dest, true)?;
+        write(CARGO, &cargo_dest, true)?;
     
         let lib_dest: String = format!("{}/src/lib.rs", self.outdir);
-        write(LIB, lib_dest, false)?;
+        write(LIB, &lib_dest, false)?;
 
         Ok(self)
     }
@@ -87,19 +88,23 @@ impl<'a> NewProject<'a> {
         fs::create_dir_all(e2e_dir)?;
     
         let spec_path: String = format!("{}/e2e/spec.conf.js", self.outdir);
-        write(E2E, spec_path, false)?;
+        write(E2E, &spec_path, false)?;
         
         Ok(self)
     }
 
     fn copy_package(&self) -> io::Result<&Self> {
         let package_path: String = format!("{}/package.json", self.outdir);
-        write(PKG, package_path, false)?;
+        write(PKG, &package_path, false)?;
+
+        let files: Vec<PathBuf> = vec![package_path.into()];
+        sd::replacer(files, "PACKAGE".into(), self.name.into()).unwrap();
+
         Ok(self)
     }
 }
 
-fn write(src: &str, dest: String, append: bool) -> io::Result<u64> {
+fn write(src: &str, dest: &String, append: bool) -> io::Result<u64> {
     let mut src: File = OpenOptions::new()
         .read(true)
         .open(src)?;
